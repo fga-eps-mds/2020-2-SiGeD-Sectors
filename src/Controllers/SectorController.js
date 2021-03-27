@@ -1,36 +1,81 @@
 const moment = require('moment-timezone');
 const Sector = require('../Models/SectorSchema');
-const validation = require('../Utils/validate');
-const jwt = require('jsonwebtoken');
+const { validate } = require('../Utils/validate');
 
-// const login = async (req, res) => {
-//     const sector = await Sector.find();
-  
-//     const { id } = sector;
-//     const token = jwt.sign({ id }, process.env.SECRET, {
-//       expiresIn: 240,
-//     });
-//     return res.json({ auth: true, token });
-// };
+const sectorGet = async (req, res) => {
+  const sectors = await Sector.find();
+
+  return res.status(200).json(sectors);
+};
+
+const sectorId = async (req, res) => {
+  const { id } = req.params;
+
+  const sector = await Sector.find({ _id: id });
+
+  return res.json(sector);
+};
 
 const sectorCreate = async (req, res) => {
-    const { name, description } = req.body;
+  const { name, description } = req.body;
 
-    const validFields = validation.validate(name, description);
+  const validFields = validate(name, description);
 
-    if (validFields.length) {
-        return res.status(500).json({ status: validFields });
+  if (validFields.length) {
+    return res.status(500).json({ status: validFields });
+  }
+
+  const newSector = await Sector.create({
+    name,
+    description,
+    createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+    updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+  });
+
+  return res.status(200).json(newSector);
+};
+
+const sectorUpdate = async (req, res) => {
+  const { id } = req.params;
+  const { name, description } = req.body;
+
+  const validFields = validate(name, description);
+
+  if (validFields.length) {
+    return res.json({ status: validFields });
+  }
+
+  const updateStatus = await Sector.findOneAndUpdate({ _id: id }, {
+    name,
+    description,
+    updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+  }, { new: true }, (err, user) => {
+    if (err) {
+      return err;
+    }
+    return user;
+  });
+
+  return res.json(updateStatus);
+};
+
+const sectorDelete = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleteStatus = await Sector.deleteOne({ _id: id });
+
+    if (deleteStatus.deletedCount !== 1) {
+      return res.json({ message: 'failure' });
     }
 
-    const newSector = await Sector.create({
-        name,
-        description,
-        createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-        updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-    });
+    return res.json({ message: 'success' });
+  } catch (error) {
+    console.log(error);
+    return res.json({ message: 'failure' });
+  }
+};
 
-    return res.json(newSector);
-}
-
-//  module.exports = { sectorCreate, login };
-module.exports = { sectorCreate };
+module.exports = {
+  sectorGet, sectorId, sectorCreate, sectorUpdate, sectorDelete,
+};

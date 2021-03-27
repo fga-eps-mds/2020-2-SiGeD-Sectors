@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const routes = require('./routes');
-require('dotenv-safe').config();
 
 const {
   DB_USER,
@@ -31,5 +30,4 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-
-module.exports = app; 
+module.exports = app;

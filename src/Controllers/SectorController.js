@@ -35,4 +35,28 @@ const sectorCreate = async (req, res) => {
   return res.status(200).json(newSector);
 };
 
-module.exports = { sectorGet, sectorId, sectorCreate };
+const sectorUpdate = async (req, res) => {
+    const { id } = req.params;
+    const { name, description } = req.body;
+
+    const validFields = validate(name, description);
+
+    if (validFields.length) {
+        return res.json({ status: validFields });
+    }
+
+    const updateStatus = await Sector.findOneAndUpdate({ _id: id }, {
+        name,
+        description,
+        updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+    }, { new: true }, (err, user) => {
+        if (err) {
+            return err;
+        }
+            return user;
+    });
+
+    return res.json(updateStatus);
+};
+
+module.exports = { sectorGet, sectorId, sectorCreate, sectorUpdate };

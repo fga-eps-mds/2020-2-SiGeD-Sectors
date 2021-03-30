@@ -1,6 +1,17 @@
 const moment = require('moment-timezone');
 const Sector = require('../Models/SectorSchema');
 const validation = require('../Utils/validate');
+const jwt = require('jsonwebtoken');
+
+// const login = async (req, res) => {
+//     const sector = await Sector.find();
+  
+//     const { id } = sector;
+//     const token = jwt.sign({ id }, process.env.SECRET, {
+//       expiresIn: 240,
+//     });
+//     return res.json({ auth: true, token });
+// };
 
 const sectorCreate = async (req, res) => {
     const { name, description } = req.body;
@@ -21,4 +32,5 @@ const sectorCreate = async (req, res) => {
     return res.json(newSector);
 }
 
+//  module.exports = { sectorCreate, login };
 module.exports = { sectorCreate };

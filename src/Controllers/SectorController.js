@@ -13,6 +13,10 @@ const sectorId = async (req, res) => {
 
   const sector = await Sector.find({ _id: id });
 
+  if(sector.length == 0){
+    return res.status(400).json(sector);
+  }
+
   return res.json(sector);
 };
 

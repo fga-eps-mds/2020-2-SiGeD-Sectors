@@ -65,7 +65,7 @@ const sectorDelete = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deleteStatus = await Sector.deleteOne({ _id: id });
+    await Sector.deleteOne({ _id: id });
 
     return res.json({ message: 'success' });
   } catch (error) {

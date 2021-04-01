@@ -1,8 +1,9 @@
+
 version: '3.8'
 
 services:
-  api:
-    container_name: backend
+  backend_sector:
+    container_name: backend_sector
     build: .
     ports:
       - 3004:3004
@@ -13,12 +14,12 @@ services:
       - ./:/code
       - node_modules:/code/node_modules
     networks: 
-      - backend
+      - backend_sector
     depends_on:
-      - database
+      - db_sector
 
-  database:
-    container_name: database
+  db_sector:
+    container_name: db_sector
     image: mongo:4.4
     restart: always
     environment:
@@ -31,11 +32,11 @@ services:
       - ./db/.dbshell:/home/mongodb/.dbshell
       - mongodb:/data/db
     networks: 
-      - backend
+      - backend_sector
 
 volumes: 
   node_modules:
   mongodb:
 
 networks: 
-  backend:
+  backend_sector:

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 describe('Sample Test', () => {
   let id;
-  const sectorGet = {
+  const sector = {
     name: 'enfermagem',
     description: 'setor de enfermagem',
   };

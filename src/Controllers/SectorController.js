@@ -1,5 +1,4 @@
 const moment = require('moment-timezone');
-const jwt = require('jsonwebtoken');
 const Sector = require('../Models/SectorSchema');
 const { validate } = require('../Utils/validate');
 
@@ -67,10 +66,6 @@ const sectorDelete = async (req, res) => {
 
   try {
     const deleteStatus = await Sector.deleteOne({ _id: id });
-
-    if (deleteStatus.deletedCount !== 1) {
-      return res.status(400).json({ message: 'failure' });
-    }
 
     return res.json({ message: 'success' });
   } catch (error) {

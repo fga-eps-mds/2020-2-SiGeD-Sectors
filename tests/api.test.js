@@ -140,7 +140,6 @@ it('Update with invalid id', async () => {
     .set('x-access-token', token)
     .send(message)
     expect(res.statusCode).toBe(400);
-    console.log(res.body);
     expect(res.body.err).toBe('invalid id')
 });
 

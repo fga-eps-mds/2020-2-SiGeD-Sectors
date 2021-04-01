@@ -14,7 +14,7 @@ const sectorId = async (req, res) => {
   try {
     const sector = await Sector.findOne({ _id: id });
     return res.status(200).json(sector);
-  } catch (err) {
+  } catch {
     return res.status(400).json({ err: 'Invalid ID' });
   }
 };
@@ -54,7 +54,7 @@ const sectorUpdate = async (req, res) => {
       updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
     }, { new: true }, (user) => user);
     return res.json(updateStatus);
-  } catch (err) {
+  } catch {
     return res.status(400).json({ err: 'invalid id' });
   }
 };

@@ -52,20 +52,18 @@ const sectorUpdate = async (req, res) => {
       name,
       description,
       updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-    }, { new: true }, user => {  
-      return user;
-    });
+    }, { new: true }, (user) => user);
     return res.json(updateStatus);
   } catch (err) {
-    return res.status(400).json({ 'err':'invalid id' });
-  }  
+    return res.status(400).json({ err: 'invalid id' });
+  }
 };
 
 const sectorDelete = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deleteStatus = await Sector.deleteOne({ _id: id });
+    await Sector.deleteOne({ _id: id });
 
     return res.json({ message: 'success' });
   } catch (error) {

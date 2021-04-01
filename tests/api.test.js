@@ -39,7 +39,7 @@ const jwt = require('jsonwebtoken');
 
 describe('Sample Test', () => {
   let id;
-  const message = {
+  const sectorGet = {
     name: 'enfermagem',
     description: 'setor de enfermagem',
   };
@@ -54,44 +54,44 @@ describe('Sample Test', () => {
   });
 
   // sector/create
-  it('Post message', async (done) => {
-    const res = await request(app).post('/sector/create').set('x-access-token', token).send(message);
+  it('Post sector', async (done) => {
+    const res = await request(app).post('/sector/create').set('x-access-token', token).send(sector);
     expect(res.statusCode).toBe(200);
-    expect(res.body.name).toBe(message.name);
-    expect(res.body.description).toBe(message.description);
+    expect(res.body.name).toBe(sector.name);
+    expect(res.body.description).toBe(sector.description);
     id = res.body._id;
     done();
   });
 
-  it('Post message error', async (done) => {
-    const errorMessage = {
+  it('Post sector error', async (done) => {
+    const errorSector = {
       name: '',
       description: '',
     };
 
-    const res = await request(app).post('/sector/create').set('x-access-token', token).send(errorMessage);
+    const res = await request(app).post('/sector/create').set('x-access-token', token).send(errorSector);
     expect(res.statusCode).toBe(400);
     expect(res.body.status).toEqual(['invalid name', 'invalid description']);
     done();
   });
 
   // sector
-  it('Get message', async (done) => {
+  it('Get sector', async (done) => {
     const res = await request(app).get('/sector/').set('x-access-token', token);
     expect(res.statusCode).toBe(200);
     done();
   });
 
   // sector/:id
-  it('Get id message', async (done) => {
+  it('Get id sector', async (done) => {
     const res = await request(app).get(`/sector/${id}`).set('x-access-token', token);
     expect(res.statusCode).toBe(200);
-    expect(res.body.name).toBe(message.name);
-    expect(res.body.description).toBe(message.description);
+    expect(res.body.name).toBe(sector.name);
+    expect(res.body.description).toBe(sector.description);
     done();
   });
 
-  it('Get id message error', async (done) => {
+  it('Get id sector error', async (done) => {
     const res = await request(app).get('/sector/12345678912345678912345').set('x-access-token', token);
     expect(res.statusCode).toBe(400);
     expect(res.body.err).toBe("Invalid ID");
@@ -99,8 +99,8 @@ describe('Sample Test', () => {
   });
 
   // sector/update/:id
-  it('Update message', async () => {
-    const message = {
+  it('Update sector', async () => {
+    const sector = {
         name: "fisioterapia",
         description: "setor de fisioterapia"
     };
@@ -108,15 +108,15 @@ describe('Sample Test', () => {
     const res = await request(app)
     .put(`/sector/update/${id}`)
     .set('x-access-token', token)
-    .send(message);
+    .send(sector);
     expect(res.statusCode).toBe(200);
-    expect(res.body.name).toBe(message.name);
-    expect(res.body.description).toBe(message.description);
+    expect(res.body.name).toBe(sector.name);
+    expect(res.body.description).toBe(sector.description);
 });
 
 // Invalido
-it('Update message error', async () => {
-    const message = {
+it('Update sector error', async () => {
+    const sector = {
         name: "",
         description: "Jest description"
     }
@@ -124,13 +124,13 @@ it('Update message error', async () => {
     const res = await request(app)
     .put(`/sector/update/${id}`)
     .set('x-access-token', token)
-    .send(message);
+    .send(sector);
     expect(res.statusCode).toBe(400);
     expect(res.body.status).toEqual([ 'invalid name' ]);
 });
 
 it('Update with invalid id', async () => {
-    const message = {
+    const sector = {
         name: "fisioterapia",
         description: "setor de fisioterapia"
     };
@@ -138,27 +138,27 @@ it('Update with invalid id', async () => {
     const res = await request(app)
     .put(`/sector/update/123abc`)
     .set('x-access-token', token)
-    .send(message)
+    .send(sector)
     expect(res.statusCode).toBe(400);
     expect(res.body.err).toBe('invalid id')
 });
 
-it('Update message without token', async () => {
-    const message = {
+it('Update sector without token', async () => {
+    const sector = {
         name: "Jest test",
         description: "Jest description"
     }
 
     const res = await request(app)
     .put(`/sector/update/${id}`)
-    .send(message);
+    .send(sector);
     expect(res.statusCode).toBe(401);
     expect(res.body).toEqual({ auth: false, message: 'No token was provided' });
 });
 
-it('Update message with invalid token', async () => {
+it('Update sector with invalid token', async () => {
     const tokenFalho = 'abc123';
-    const message = {
+    const sector = {
         name: "Jest test",
         description: "Jest description"
     }
@@ -166,19 +166,19 @@ it('Update message with invalid token', async () => {
     const res = await request(app)
     .put(`/sector/update/${id}`)
     .set('x-access-token', tokenFalho)
-    .send(message);
+    .send(sector);
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({ auth: false, message: 'It was not possible to authenticate the token.' });
 });
 
-it('Delete message', async (done) => {
+it('Delete sector', async (done) => {
     const res = await request(app).delete(`/sector/delete/${id}`).set('x-access-token', token)
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({"message":"success"});
     done();
   });
 
-  it('Delete message error', async (done) => {
+  it('Delete sector error', async (done) => {
     const res = await request(app).del('/sector/delete/09876543210987654321').set('x-access-token', token)
     expect(res.statusCode).toBe(400);
     expect(res.body).toEqual({"message":"failure"});

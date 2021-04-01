@@ -1,9 +1,10 @@
 const moment = require('moment-timezone');
+const jwt = require('jsonwebtoken');
 const Sector = require('../Models/SectorSchema');
 const { validate } = require('../Utils/validate');
 
 const sectorGet = async (req, res) => {
-  const sectors = await Sector.find();
+  const sectors = await Sector.findOne();
 
   return res.status(200).json(sectors);
 };
@@ -11,9 +12,12 @@ const sectorGet = async (req, res) => {
 const sectorId = async (req, res) => {
   const { id } = req.params;
 
-  const sector = await Sector.find({ _id: id });
-
-  return res.json(sector);
+  try {
+    const sector = await Sector.findOne({ _id: id });
+    return res.status(200).json(sector);
+  } catch (err) {
+    return res.status(400).json({ err: 'Invalid ID' });
+  }
 };
 
 const sectorCreate = async (req, res) => {
@@ -22,7 +26,7 @@ const sectorCreate = async (req, res) => {
   const validFields = validate(name, description);
 
   if (validFields.length) {
-    return res.status(500).json({ status: validFields });
+    return res.status(400).json({ status: validFields });
   }
 
   const newSector = await Sector.create({
@@ -42,21 +46,20 @@ const sectorUpdate = async (req, res) => {
   const validFields = validate(name, description);
 
   if (validFields.length) {
-    return res.json({ status: validFields });
+    return res.status(400).json({ status: validFields });
   }
-
-  const updateStatus = await Sector.findOneAndUpdate({ _id: id }, {
-    name,
-    description,
-    updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-  }, { new: true }, (err, user) => {
-    if (err) {
-      return err;
-    }
-    return user;
-  });
-
-  return res.json(updateStatus);
+  try {
+    const updateStatus = await Sector.findOneAndUpdate({ _id: id }, {
+      name,
+      description,
+      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+    }, { new: true }, user => {  
+      return user;
+    });
+    return res.json(updateStatus);
+  } catch (err) {
+    return res.status(400).json({ 'err':'invalid id' });
+  }  
 };
 
 const sectorDelete = async (req, res) => {
@@ -66,13 +69,12 @@ const sectorDelete = async (req, res) => {
     const deleteStatus = await Sector.deleteOne({ _id: id });
 
     if (deleteStatus.deletedCount !== 1) {
-      return res.json({ message: 'failure' });
+      return res.status(400).json({ message: 'failure' });
     }
 
     return res.json({ message: 'success' });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: 'failure' });
+    return res.status(400).json({ message: 'failure' });
   }
 };
 

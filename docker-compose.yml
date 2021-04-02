@@ -2,7 +2,7 @@
 version: '3.8'
 
 services:
-  api:
+  backend_sector:
     container_name: backend_sector
     build: .
     ports:

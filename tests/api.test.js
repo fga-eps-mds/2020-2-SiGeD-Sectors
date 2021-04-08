@@ -63,37 +63,6 @@ describe('Sample Test', () => {
     done();
   });
 
-  // sector/update/:id
-  it('Update sector', async () => {
-    const sector = {
-        name: "fisioterapia",
-        description: "setor de fisioterapia"
-    };
-
-    const res = await request(app)
-    .put(`/sector/update/${id}`)
-    .set('x-access-token', token)
-    .send(sector);
-    expect(res.statusCode).toBe(200);
-    expect(res.body.name).toBe(sector.name);
-    expect(res.body.description).toBe(sector.description);
-});
-
-// Invalido
-it('Update sector error', async () => {
-    const sector = {
-        name: "",
-        description: "Jest description"
-    }
-
-    const res = await request(app)
-    .put(`/sector/update/${id}`)
-    .set('x-access-token', token)
-    .send(sector);
-    expect(res.statusCode).toBe(400);
-    expect(res.body.status).toEqual([ 'invalid name' ]);
-});
-
 it('Update with invalid id', async () => {
     const sector = {
         name: "fisioterapia",
@@ -135,13 +104,6 @@ it('Update sector with invalid token', async () => {
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({ auth: false, message: 'It was not possible to authenticate the token.' });
 });
-
-it('Delete sector', async (done) => {
-    const res = await request(app).delete(`/sector/delete/${id}`).set('x-access-token', token)
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({"message":"success"});
-    done();
-  });
 
   it('Delete sector error', async (done) => {
     const res = await request(app).del('/sector/delete/09876543210987654321').set('x-access-token', token)

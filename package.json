@@ -6,7 +6,8 @@
   "author": "DafneM <moretti.dafne2@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "nodemon src/index.js",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "dependencies": {
     "cors": "^2.8.5",

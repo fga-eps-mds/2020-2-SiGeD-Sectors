@@ -1,26 +1,19 @@
-on: ["push", "pull_request"]
-
-name: Test Coveralls
-
+name: build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    paths:
+      - '!*.MD'
 jobs:
-
-  build:
-    name: Build
+  coverage:
+    name: coverage
     runs-on: ubuntu-latest
     steps:
-
-    - uses: actions/checkout@v1
-
-    - name: Use Node.js 10.x
-      uses: actions/setup-node@v1
+    - uses: actions/checkout@master
+    - uses: paambaati/codeclimate-action@v2.2.4
+      env:
+        CC_TEST_REPORTER_ID: db833e039daf299e865d7fee36a77af803be4d7d7bcfd859a0250a5518d5ae5c
       with:
-        node-version: 10.x
-
-    - name: npm install, make test-coverage
-      run: docker-compose run backend_sector bash -c  "yarn && yarn jest --coverage --forceExit"
-
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-
+        coverageCommand: docker-compose run backend_sector bash -c  "yarn && yarn jest --coverage --forceExit"

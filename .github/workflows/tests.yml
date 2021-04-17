@@ -1,4 +1,4 @@
-name: CI
+name: Tests 
 
 on: [push, pull_request]
 
@@ -12,3 +12,7 @@ jobs:
     - name: Tests check
       run: docker-compose run backend_sector bash -c  "yarn && yarn jest --coverage --forceExit"
 
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

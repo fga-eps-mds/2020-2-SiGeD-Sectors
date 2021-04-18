@@ -78,35 +78,6 @@ describe('Sample Test', () => {
     expect(res.body.name).toBe(sector.name);
     expect(res.body.description).toBe(sector.description);
 });
-
-// Invalido
-it('Update sector error', async () => {
-    const sector = {
-        name: "",
-        description: "Jest description"
-    }
-
-    const res = await request(app)
-    .put(`/sector/update/${id}`)
-    .set('x-access-token', token)
-    .send(sector);
-    expect(res.statusCode).toBe(400);
-    expect(res.body.status).toEqual([ 'invalid name' ]);
-});
-
-it('Update with invalid id', async () => {
-    const sector = {
-        name: "fisioterapia",
-        description: "setor de fisioterapia"
-    };
-
-    const res = await request(app)
-    .put(`/sector/update/123abc`)
-    .set('x-access-token', token)
-    .send(sector)
-    expect(res.statusCode).toBe(400);
-    expect(res.body.err).toBe('invalid id')
-});
 });
 
 afterAll(async (done) => {

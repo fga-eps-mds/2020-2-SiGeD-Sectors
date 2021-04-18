@@ -107,48 +107,6 @@ it('Update with invalid id', async () => {
     expect(res.statusCode).toBe(400);
     expect(res.body.err).toBe('invalid id')
 });
-
-it('Update sector without token', async () => {
-    const sector = {
-        name: "Jest test",
-        description: "Jest description"
-    }
-
-    const res = await request(app)
-    .put(`/sector/update/${id}`)
-    .send(sector);
-    expect(res.statusCode).toBe(401);
-    expect(res.body).toEqual({ auth: false, message: 'No token was provided' });
-});
-
-it('Update sector with invalid token', async () => {
-    const tokenFalho = 'abc123';
-    const sector = {
-        name: "Jest test",
-        description: "Jest description"
-    }
-
-    const res = await request(app)
-    .put(`/sector/update/${id}`)
-    .set('x-access-token', tokenFalho)
-    .send(sector);
-    expect(res.statusCode).toBe(500);
-    expect(res.body).toEqual({ auth: false, message: 'It was not possible to authenticate the token.' });
-});
-
-it('Delete sector', async (done) => {
-    const res = await request(app).delete(`/sector/delete/${id}`).set('x-access-token', token)
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({"message":"success"});
-    done();
-  });
-
-  it('Delete sector error', async (done) => {
-    const res = await request(app).del('/sector/delete/09876543210987654321').set('x-access-token', token)
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual({"message":"failure"});
-    done();
-  });
 });
 
 afterAll(async (done) => {

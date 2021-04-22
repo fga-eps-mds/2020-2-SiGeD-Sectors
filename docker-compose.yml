@@ -9,12 +9,13 @@ services:
       - 3004:3004
     environment: 
       PORT: 3004
-    env_file: .env_db
+    env_file: .env
     volumes:
       - ./:/code
       - node_modules:/code/node_modules
     networks: 
       - backend_sector
+      - siged_backend
     depends_on:
       - db_sector
 
@@ -26,7 +27,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: root-db
-    env_file: .env_db
+    env_file: .env
     volumes:
       - ./db/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
       - ./db/.dbshell:/home/mongodb/.dbshell
@@ -40,3 +41,5 @@ volumes:
 
 networks: 
   backend_sector:
+  siged_backend:
+    external: true

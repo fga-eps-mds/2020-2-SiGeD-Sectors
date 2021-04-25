@@ -1,5 +1,8 @@
 # API de Setores
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL3-blue.svg)](https://opensource.org/licenses/gpl-3.0.html)
+[![codecov](https://codecov.io/gh/fga-eps-mds/2020-2-SiGeD-Sectors/branch/master/graph/badge.svg?token=KQw64ih7YW)](https://codecov.io/gh/fga-eps-mds/2020-2-SiGeD-Sectors)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fga-eps-mds_2020-2-G4-Sectors&metric=alert_status)](https://sonarcloud.io/dashboard?id=fga-eps-mds_2020-2-G4-Sectors)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0e583ef4f237a7020f8b/maintainability)](https://codeclimate.com/github/fga-eps-mds/2020-2-SiGeD-Sectors/maintainability)
 
 Essa API faz parte da arquitetura de microsserviços do projeto [`SiGeD`](https://github.com/fga-eps-mds/2020-2-SiGeD), sua funcionalidade é possibilitar o controle dos dados dos setores. 
 

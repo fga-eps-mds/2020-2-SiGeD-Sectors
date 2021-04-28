@@ -40,6 +40,13 @@ describe('Sample Test', () => {
     done();
   });
 
+  it('Post duplicated sector', async (done) => {
+    const res = await request(app).post('/sector/create').set('x-access-token', token).send(sector);
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({ error: 11000 });
+    done();
+  }) 
+
   // sector
   it('Get sector', async (done) => {
     const res = await request(app).get('/sector/').set('x-access-token', token);

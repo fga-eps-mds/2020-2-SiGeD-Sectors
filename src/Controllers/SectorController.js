@@ -37,10 +37,7 @@ const sectorCreate = async (req, res) => {
     });
     return res.status(200).json(newSector);
   } catch(error) {
-    if (error.code === 11000) {
-      return res.status(400).json({ duplicated: error.keyValue });
-    }
-    return res.status(400).json({ error: error });
+    return res.status(400).json({ error: error.code });
   }
 };
 

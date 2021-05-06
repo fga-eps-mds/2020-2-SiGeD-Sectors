@@ -9,15 +9,58 @@ describe('Sample Test', () => {
     description: 'setor teste',
   };
 
+  const sector1 = {
+    name: 'setor um',
+    description: 'setor número um',
+  };
+
+  const sector2 = {
+    name: 'setor dois',
+    description: 'setor número dois',
+  };
+
+  const sector3 = {
+    name: 'setor três',
+    description: 'setor número três',
+  };
+
+  const sector4 = {
+    name: 'setor quatro',
+    description: 'setor número quatro',
+  };
+
+  const sector5 = {
+    name: 'setor cinco',
+    description: 'setor número cinco',
+  };
+
   const token = jwt.sign({ name: "Teste", description: "Teste" }, process.env.SECRET, {
     expiresIn: 240,
   });
+
+
+  beforeAll(async () => {
+    await request(app).post('/sector/create').set('x-access-token', token).send(sector1);
+    await request(app).post('/sector/create').set('x-access-token', token).send(sector2);
+    await request(app).post('/sector/create').set('x-access-token', token).send(sector3);
+    await request(app).post('/sector/create').set('x-access-token', token).send(sector4);
+    await request(app).post('/sector/create').set('x-access-token', token).send(sector5);
+  })
+
 
   it('App is defined', (done) => {
     expect(app).toBeDefined();
     done();
   });
 
+  it('Get newest four sectors', async (done) => {
+    const res = await request(app).get('/sector/newest-four').set('x-access-token', token);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(4);
+    done();
+  });
+
+  // sector/create
   it('Post sector', async (done) => {
     const res = await request(app).post('/sector/create').set('x-access-token', token).send(sector);
     expect(res.statusCode).toBe(200);

@@ -27,14 +27,6 @@ describe('Sample Test', () => {
     done();
   });
 
-  it('Post duplicated sector', async (done) => {
-    const res = await request(app).post('/sector/create').set('x-access-token', token).send(sector);
-    console.log(res);
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual({ error: 11000 });
-    done();
-  });
-
   it('Post sector error', async (done) => {
     const errorSector = {
       name: '',

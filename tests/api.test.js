@@ -6,7 +6,7 @@ describe('Sample Test', () => {
   let id;
   const sector = {
     name: Math.random().toString(36).substr(2, 5),
-    description: 'setor de enfermagem',
+    description: 'setor teste',
   };
 
   const token = jwt.sign({ name: "Teste", description: "Teste" }, process.env.SECRET, {
@@ -27,6 +27,14 @@ describe('Sample Test', () => {
     done();
   });
 
+  it('Post duplicated sector', async (done) => {
+    const res = await request(app).post('/sector/create').set('x-access-token', token).send(sector);
+    console.log(res);
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({ error: 11000 });
+    done();
+  });
+
   it('Post sector error', async (done) => {
     const errorSector = {
       name: '',
@@ -36,13 +44,6 @@ describe('Sample Test', () => {
     const res = await request(app).post('/sector/create').set('x-access-token', token).send(errorSector);
     expect(res.statusCode).toBe(400);
     expect(res.body.status).toEqual(['invalid name', 'invalid description']);
-    done();
-  });
-
-  it('Post duplicated sector', async (done) => {
-    const res = await request(app).post('/sector/create').set('x-access-token', token).send(sector);
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual({ error: 11000 });
     done();
   });
 
@@ -67,12 +68,11 @@ describe('Sample Test', () => {
     done();
   });
 
-  it('Update sector', async () => {
+  it('Update sector', async (done) => {
     const sector = {
-        name: "fisioterapia",
-        description: "setor de fisioterapia"
+      name: "fisioterapia",
+      description: "setor de fisioterapia"
     };
-
     const res = await request(app)
     .put(`/sector/update/${id}`)
     .set('x-access-token', token)
@@ -80,66 +80,67 @@ describe('Sample Test', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.name).toBe(sector.name);
     expect(res.body.description).toBe(sector.description);
-});
+    done();
+  });
 
-it('Update sector error', async () => {
+  it('Update sector error', async (done) => {
     const sector = {
-        name: "",
-        description: "Jest description"
-    }
-
+      name: "",
+      description: "Jest description"
+    };
     const res = await request(app)
     .put(`/sector/update/${id}`)
     .set('x-access-token', token)
     .send(sector);
     expect(res.statusCode).toBe(400);
     expect(res.body.status).toEqual([ 'invalid name' ]);
-});
+    done();
+  });
 
-it('Update with invalid id', async () => {
+  it('Update with invalid id', async (done) => {
     const sector = {
-        name: "fisioterapia",
-        description: "setor de fisioterapia"
+      name: "fisioterapia",
+      description: "setor de fisioterapia"
     };
-
     const res = await request(app)
     .put(`/sector/update/123abc`)
     .set('x-access-token', token)
-    .send(sector)
+    .send(sector);
     expect(res.statusCode).toBe(400);
-    expect(res.body.err).toBe('invalid id')
-});
+    expect(res.body.err).toBe('invalid id');
+    done();
+  });
 
-it('Update sector without token', async () => {
+  it('Update sector without token', async (done) => {
     const sector = {
-        name: "Jest test",
-        description: "Jest description"
-    }
-
+      name: "Jest test",
+      description: "Jest description"
+    };
     const res = await request(app)
     .put(`/sector/update/${id}`)
     .send(sector);
     expect(res.statusCode).toBe(401);
     expect(res.body).toEqual({ auth: false, message: 'No token was provided' });
-});
+    done();
+  });
 
-it('Update sector with invalid token', async () => {
+  it('Update sector with invalid token', async (done) => {
     const tokenFalho = 'abc123';
     const sector = {
-        name: "Jest test",
-        description: "Jest description"
+      name: "Jest test",
+      description: "Jest description"
     }
-
     const res = await request(app)
     .put(`/sector/update/${id}`)
     .set('x-access-token', tokenFalho)
     .send(sector);
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({ auth: false, message: 'It was not possible to authenticate the token.' });
-});
+    done();
+  });
 
-it('Delete sector', async (done) => {
-    const res = await request(app).delete(`/sector/delete/${id}`).set('x-access-token', token)
+  it('Delete sector', async (done) => {
+    const res = await request(app).delete(`/sector/delete/${id}`).set('x-access-token', token);
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({"message":"success"});
     done();

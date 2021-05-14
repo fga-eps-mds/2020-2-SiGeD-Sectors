@@ -28,14 +28,17 @@ const sectorCreate = async (req, res) => {
     return res.status(400).json({ status: validFields });
   }
 
-  const newSector = await Sector.create({
-    name,
-    description,
-    createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-    updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-  });
-
-  return res.status(200).json(newSector);
+  try {
+    const newSector = await Sector.create({
+      name,
+      description,
+      createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+    });
+    return res.status(200).json(newSector);
+  } catch (error) {
+    return res.status(400).json({ error: error.code });
+  }
 };
 
 const sectorUpdate = async (req, res) => {

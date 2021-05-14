@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const sectorSchema = new mongoose.Schema({
   name: {
     type: String,
+    unique: true,
     require: [true],
   },
   description: {

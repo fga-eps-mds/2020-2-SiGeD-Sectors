@@ -15,6 +15,14 @@ Caso reste duvidas você também pode entrar em contato conosco criando uma issu
 
 A documentação do projeto pode ser acessada pelo nosso site em https://fga-eps-mds.github.io/2020-2-SiGeD/ ou você pode acessar pela [SiGeD Documentação](https://fga-eps-mds.github.io/2020-2-SiGeD/home/)
 
+## Testes
+
+Todas as funções adicionadas nessa API devem ser testadas, o repositŕorio aceita até 10% do total de lihas não testadas. Para rodar os testes nesse repositŕio deve ser executado o comando:
+
+```bash
+docker-compose run backend_sector bash -c  "yarn && yarn jest --coverage --forceExit"
+```
+
 ## Como rodar?
 
 Para rodar a API é preciso usar os seguintes comandos usando o docker:
@@ -42,6 +50,10 @@ Para receber os dados dos setores.
 
 Para receber os dados de um setor específico utilizando o `id`.
 
+**GET: `/sector/newest-four`**
+
+Para receber os dados dos últimos quatro setores adicionados.
+
 **POST: `/sector/create`**
 
 Para criar um novo setor, envie os dados nesse formato:
@@ -67,4 +79,3 @@ Para atualizar os dados do setor, envie os dados atualizados seguindo o padrão:
 **DELETE: `/sector/delete/:id`**
 
 Para deletar um setor pelo `id`.
-
